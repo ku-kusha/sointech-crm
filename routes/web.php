@@ -20,3 +20,10 @@ Route::get('/', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard')->middleware('verified');
+
+Route::namespace('Admin')->middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return view('admin.index');
+    })->name('home');
+    Route::resource('/users', 'UsersController', ['except' => ['show', 'create', 'store']]);
+});
